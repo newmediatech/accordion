@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  test:
+    image: accordion_test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - "./:/var/accordion/"
+    command: bash -c "coverage run --source='./accordion/' -m pytest tests -vv && coverage combine && coverage report"
