@@ -1,6 +1,6 @@
 # Accordion
 
-[![Build Status](https://travis-ci.org/ruslux/accordion.svg?branch=master)](https://travis-ci.org/ruslux/accordion) 
+[![Build Status](https://travis-ci.org/newmediatech/accordion.svg?branch=master)](https://travis-ci.org/newmediatech/accordion) 
 [![Coverage Status](https://coveralls.io/repos/github/ruslux/accordion/badge.svg?branch=master)](https://coveralls.io/github/ruslux/accordion)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ruslux/accordion/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ruslux/accordion)
 [![PyPI version](https://badge.fury.io/py/accordion.svg)](https://badge.fury.io/py/accordion)
