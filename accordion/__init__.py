@@ -23,13 +23,13 @@ def compress(data, node_delimiter=".", list_delimiter="/"):
     while not _queue.empty():
         _parent_name, _data = _queue.get()
 
-        if isinstance(_data, collections.Mapping):
+        if isinstance(_data, collections.Mapping) and len(_data):
             for key, value in _data.items():
                 _name = f"{_parent_name}{node_delimiter}" if _parent_name else ""
 
                 _queue.put((f"{_name}{key}", value))
 
-        elif isinstance(_data, (tuple, list)):
+        elif isinstance(_data, (tuple, list)) and len(_data):
             for index, value in enumerate(_data):
                 _queue.put((f"{_parent_name}{list_delimiter}{index}", value))
         else:
@@ -38,34 +38,56 @@ def compress(data, node_delimiter=".", list_delimiter="/"):
     return _flat
 
 
-def _update_tree(root, nodes, data, list_delimiter):
+def _update_tree(parent, nodes, value, list_delimiter):
+    # closure for simple access to parent[index] without return node
+    def _initialize_node(index_or_key, type):
+        try:
+            parent[index_or_key]
+
+        except IndexError:
+            # parent is list but element with index does not exist
+            parent.append(type())
+            _initialize_node(index_or_key, type)
+
+        except KeyError:
+            # parent is list but element does not exist
+            parent[index_or_key] = type()
+
     _head, *_tail = nodes
-    _index = -1
+
+    _indexes = []
 
     if list_delimiter in _head:
-        _head, _index = _head.split(list_delimiter)
-        _index = int(_index)
+        _head, *_indexes = _head.split(list_delimiter)
 
-    if root.get(_head) is None and _index > -1:
-        root[_head] = []
-    elif root.get(_head) is None and not _tail:
-        root[_head] = data
+    # convert to int for _initialize_node -> parent[index_or_key]
+    _indexes = [int(_index) for _index in _indexes]
+
+    # is nested arrays or array
+    if _indexes:
+        _initialize_node(_head, list)
+
+        parent = parent[_head]
+
+        for i, _index in enumerate(_indexes):
+            # is nested arrays
+            if i < len(_indexes) - 1:
+                _initialize_node(_index, list)
+                parent = parent[_index]
+
+            # is final value
+            else:
+                _initialize_node(_index, lambda: value)
+
+    # is nested dict
+    elif _tail:
+        _initialize_node(_head, dict)
+        _update_tree(parent[_head], _tail, value, list_delimiter)
+
+    # is final value
+    else:
+        parent[_head] = value
         return
-    elif root.get(_head) is None:
-        root[_head] = {}
-
-    if isinstance(root.get(_head), dict) and _tail:
-        _update_tree(root[_head], _tail, data, list_delimiter)
-    elif isinstance(root.get(_head), list):
-        while len(root[_head]) < _index + 1:
-            root[_head].append(None)
-
-        if _tail:
-            _next = {}
-            _update_tree(_next, _tail, data, list_delimiter)
-            root[_head][_index] = _next
-        else:
-            root[_head][_index] = data
 
 
 def expand(data, node_delimiter: str = ".", list_delimiter: str = "/"):
