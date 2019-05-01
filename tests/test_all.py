@@ -27,7 +27,7 @@ class FlatTestCase(TestCase):
         _like_source = expand(_modified)
         assert _source == _like_source
 
-    def test_deep(self):
+    def test_dict_in_list(self):
         data = {
             'root.1.child/0.count': '0',
             'root.1.child/1.count': '0',
@@ -44,6 +44,22 @@ class FlatTestCase(TestCase):
                         {'count': '0'},
                         {'count': '0'},
                     ]
+                }
+            }
+        }
+
+    def test_value_in_list(self):
+        data = {
+            'root.1.child/0': '0',
+            'root.1.child/1': '0',
+            'root.1.child/2': '0',
+            'root.1.child/3': '0',
+        }
+
+        assert expand(data) == {
+            'root': {
+                '1': {
+                    'child': ['0', '0', '0', '0']
                 }
             }
         }
