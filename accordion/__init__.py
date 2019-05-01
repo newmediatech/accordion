@@ -53,6 +53,8 @@ def _update_tree(parent, nodes, value, list_delimiter):
             # parent is list but element does not exist
             parent[index_or_key] = type()
 
+        print(parent, value)
+
     _head, *_tail = nodes
 
     _indexes = []
@@ -76,8 +78,11 @@ def _update_tree(parent, nodes, value, list_delimiter):
                 parent = parent[_index]
 
             # is final value
-            else:
+            elif not _tail:
                 _initialize_node(_index, lambda: value)
+            else:
+                _initialize_node(_index, dict)
+                _update_tree(parent[_index], _tail, value, list_delimiter)
 
     # is nested dict
     elif _tail:

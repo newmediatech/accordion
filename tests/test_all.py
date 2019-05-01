@@ -27,6 +27,49 @@ class FlatTestCase(TestCase):
         _like_source = expand(_modified)
         assert _source == _like_source
 
+    def test_deep(self):
+        data = {
+            'root.1.child/0.count': '0',
+            'root.1.child/1.count': '0',
+            'root.1.child/2.count': '0',
+            'root.1.child/3.count': '0',
+        }
+
+        assert expand(data) == {
+            'root': {
+                '1': {
+                    'child': [
+                        {'count': '0'},
+                        {'count': '0'},
+                        {'count': '0'},
+                        {'count': '0'},
+                    ]
+                }
+            }
+        }
+
+    def test_list_missing_index(self):
+        data = {
+            'root.1.child/0.count': '0',
+            'root.1.child/1.count': '0',
+            'root.1.child/2.count': '0',
+            'root.1.child/4.count': '0',
+        }
+
+        assert expand(data) == {
+            'root': {
+                '1': {
+                    'child': [
+                        {'count': '0'},
+                        {'count': '0'},
+                        {'count': '0'},
+                        {},
+                        {'count': '0'},
+                    ]
+                }
+            }
+        }
+
     def test_matrix(self):
         _source = {
             'matrix/0/0': 1,
