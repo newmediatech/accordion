@@ -53,8 +53,6 @@ def _update_tree(parent, nodes, value, list_delimiter):
             # parent is list but element does not exist
             parent[index_or_key] = type()
 
-        print(parent, value)
-
     _head, *_tail = nodes
 
     _indexes = []
