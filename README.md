@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/newmediatech/accordion.svg?branch=master)](https://travis-ci.org/newmediatech/accordion) 
 [![Coverage Status](https://coveralls.io/repos/github/newmediatech/accordion/badge.svg?branch=master)](https://coveralls.io/github/newmediatech/accordion)
 [![PyPI version](https://badge.fury.io/py/accordion.svg)](https://badge.fury.io/py/accordion)
+[![Downloads](https://img.shields.io/pypi/dm/accordion.svg)](https://pypi.python.org/pypi/accordion)
 
 - [About](#about)
 - [Installation](#installation)
